@@ -1,0 +1,18 @@
+version: "3"
+services:
+  teamcity-server:
+    container_name: teamcity-server
+    image: jetbrains/teamcity-server
+    ports:
+      - "8112:8111"
+    volumes:
+      - ./teamcity-server/data_dir:/data/teamcity_server/datadir
+      - ./teamcity-server/log_dir:/opt/teamcity/logs
+  teamcity-agent:
+    container_name: teamcity-agent
+    image: jetbrains/teamcity-agent
+    environment:
+      - AGENT_NAME=regular_agent
+      - SERVER_URL=http://192.168.11.9:8112
+    volumes:
+      - ./teamcity-regular_agent:/data/teamcity_agent/conf
