@@ -1,6 +1,8 @@
 version: '3.9'
 services:
   teamcity-server:
+    env_file:
+      - ./.env
     container_name: teamcity-server
     image: jetbrains/teamcity-server
     ports:

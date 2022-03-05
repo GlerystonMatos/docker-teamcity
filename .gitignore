@@ -1,2 +1,2 @@
-teamcity-server/
-teamcity-regular_agent/
+teamcity-server/*
+teamcity-regular_agent/*
