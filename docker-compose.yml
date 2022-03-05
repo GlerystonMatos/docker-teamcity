@@ -10,6 +10,9 @@ services:
     volumes:
       - ./teamcity-server/data_dir:/data/teamcity_server/datadir
       - ./teamcity-server/log_dir:/opt/teamcity/logs
+    networks:
+      - teamcity_net
+
   teamcity-agent:
     container_name: teamcity-agent
     image: jetbrains/teamcity-agent
@@ -18,12 +21,36 @@ services:
       - SERVER_URL=http://192.168.11.9:8112
     volumes:
       - ./teamcity-regular_agent:/data/teamcity_agent/conf
+    networks:
+      - teamcity_net
+
   postgres:
-    image: postgres
-    container_name: teamcity-postgres
+    image: 'postgres'
+    container_name: 'postgres'
     environment:
-      POSTGRES_PASSWORD: '1234'
+      - POSTGRES_USER=glerystonmatos
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
     ports:
-      - 5433:5432
+      - '54320:5432'
     volumes:
-      - ./postgresql:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - teamcity_net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: 'pgadmin'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'glerystonmatos@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: '1234'
+    ports:
+      - '16543:80'
+    depends_on:
+      - postgres
+    networks:
+      - teamcity_net
+
+networks:
+  teamcity_net:
+    name: teamcity_net
